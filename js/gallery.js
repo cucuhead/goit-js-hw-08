@@ -84,10 +84,11 @@ imgList.innerHTML = galleryItems;
 imgList.addEventListener("click", (event) => {
   event.preventDefault();
 
-  // Sadece img'ye tıklanırsa devam et
+  // Sadece <img> elementine tıklanırsa devam et
   if (event.target.nodeName !== "IMG") return;
 
-  const originalSrc = event.target.dataset.source;
+  // Modal resmi <a> elementinin href niteliğinden al
+  const originalSrc = event.target.parentElement.href;
 
   const instance = basicLightbox.create(`
     <img src="${originalSrc}" width="800" height="600" alt="Büyük Resim" />
@@ -95,7 +96,6 @@ imgList.addEventListener("click", (event) => {
 
   instance.show();
 
-  // ESC ile kapatma
   function onEscKey(event) {
     if (event.key === "Escape") {
       instance.close();
@@ -105,6 +105,7 @@ imgList.addEventListener("click", (event) => {
 
   window.addEventListener("keydown", onEscKey);
 });
+
 
 
 
