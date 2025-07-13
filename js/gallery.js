@@ -65,18 +65,16 @@ const images = [
     description: 'Lighthouse Coast Sea',
   },
 ];
-
-
-
-
-
-
 const imgList = document.querySelector(".gallery");
 
 const galleryItems = images.map(({ preview, original, description }) => `
   <li class="gallery-item">
     <a class="gallery-link" href="${original}">
-      <img class="gallery-image" src="${preview}" alt="${description}" />
+      <img 
+        class="gallery-image" 
+        src="${preview}" 
+        alt="${description}" 
+        data-source="${original}" />
     </a>
   </li>
 `).join("");
@@ -86,18 +84,10 @@ imgList.innerHTML = galleryItems;
 imgList.addEventListener("click", (event) => {
   event.preventDefault();
 
-  let originalSrc = null;
+  // Sadece img'ye tıklanırsa devam et
+  if (event.target.nodeName !== "IMG") return;
 
-  if (event.target.nodeName === "A") {
-    originalSrc = event.target.href;
-  } else if (event.target.nodeName === "IMG") {
-    const parentLink = event.target.parentElement;
-    if (parentLink && parentLink.nodeName === "A") {
-      originalSrc = parentLink.href;
-    }
-  }
-
-  if (!originalSrc) return;
+  const originalSrc = event.target.dataset.source;
 
   const instance = basicLightbox.create(`
     <img src="${originalSrc}" width="800" height="600" alt="Büyük Resim" />
@@ -105,6 +95,7 @@ imgList.addEventListener("click", (event) => {
 
   instance.show();
 
+  // ESC ile kapatma
   function onEscKey(event) {
     if (event.key === "Escape") {
       instance.close();
@@ -114,3 +105,11 @@ imgList.addEventListener("click", (event) => {
 
   window.addEventListener("keydown", onEscKey);
 });
+
+
+
+
+
+
+
+
